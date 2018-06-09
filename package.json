@@ -1,18 +1,25 @@
 {
-  "name": "NoteApp",
-  "version": "0.1.0",
+  "name": "noteapp",
+  "version": "0.0.1",
   "description": "A Note App",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron"
   },
-  "repository": "https://github.com/Klein4869/NoteApp.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klein4869/NoteApp.git"
+  },
   "keywords": [
-    "Note",
+    "note"
   ],
   "author": "Klein4869",
-  "license": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Klein4869/NoteApp/issues"
+  },
+  "homepage": "https://github.com/Klein4869/NoteApp#readme",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.2"
   }
 }
