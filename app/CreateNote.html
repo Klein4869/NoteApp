@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>New Note</title>
+    <link rel="stylesheet" type="text/css" href="css/CreateNote.css">
+    <script>
+        const test = require('./js/CreateNote')
+        test.start()
+    </script>
+</head>
+<body style="height: 100%;">
+    <p>Note Title</p>
+    <input type="text" id="titleInput" style="width: 500px; height: 25px">
+    <p>Note Content</p>
+    <textarea class="contentInput" id="contentInput" onfocus="test.del()">在这里输入内容</textarea><br>
+    <button onclick="test.start()">Save</button> <button onclick="test.cancel()">Cancel</button>
+</body>
+</html>
