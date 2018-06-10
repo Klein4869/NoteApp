@@ -26,7 +26,7 @@ let template = [{
         label: 'New Note',
         accelerator: 'CmdOrCtrl + N',
         role: 'create_new',
-        click:() => {
+        click: () => {
             window = new BrowserWindow({width: 800, height: 600, show: false})
             window.loadFile('./app/CreateNote.html')
             window.once('ready-to-show', function () {
@@ -128,9 +128,7 @@ function createMainWindow() {
 
     // and load the index.html of the app.
     mainWindow.loadFile('./app/index.html')
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
-    })
+    mainWindow.show()
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -148,31 +146,24 @@ function createMainWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
+    window = new BrowserWindow({width: 800, height: 600, show: false})
+    window.loadFile('./app/CreateNote.html')
     createMainWindow()
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
-    ipc.on('createClose', () => {
-        window.close()
+    ipc.on('createClose', (event, num) => {
         mainWindow.reload()
+        window.close()
     })
     ipc.on('openCreateWindow', () => {
-        window = new BrowserWindow({width: 800, height: 600, show: false})
-        window.loadFile('./app/CreateNote.html')
-        window.once('ready-to-show', () => {
-            window.show()
-        })
+        window.show()
         window.on('closed', () => {
             window = null
         })
     })
-    ipc.on('makeChanges', (args) => {
-        alert(args)
-        window = new BrowserWindow({width: 800, height: 600, show: false})
-        window.loadFile('./app/CreateNote.html')
-        window.webContents.send(args)
-        window.once('ready-to-show', () => {
-            window.show()
-        })
+    ipc.on('makeChanges', (event, key) => {
+        window.webContents.send('makeChanges', key)
+        window.show()
         window.on('closed', () => {
             window = null
         })
