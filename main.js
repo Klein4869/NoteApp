@@ -26,8 +26,8 @@ let template = [{
         label: 'New Note',
         accelerator: 'CmdOrCtrl + N',
         role: 'create_new',
-        click: function () {
-            window = new BrowserWindow({width:800, height:600})
+        click:() => {
+            window = new BrowserWindow({width: 800, height: 600, show: false})
             window.loadFile('./app/CreateNote.html')
             window.once('ready-to-show', function () {
                 window.show()
@@ -128,7 +128,7 @@ function createMainWindow() {
 
     // and load the index.html of the app.
     mainWindow.loadFile('./app/index.html')
-    mainWindow.once('ready-to-show', () =>{
+    mainWindow.once('ready-to-show', () => {
         mainWindow.show()
     })
 
@@ -153,6 +153,29 @@ app.on('ready', function () {
     Menu.setApplicationMenu(menu)
     ipc.on('createClose', () => {
         window.close()
+        mainWindow.reload()
+    })
+    ipc.on('openCreateWindow', () => {
+        window = new BrowserWindow({width: 800, height: 600, show: false})
+        window.loadFile('./app/CreateNote.html')
+        window.once('ready-to-show', () => {
+            window.show()
+        })
+        window.on('closed', () => {
+            window = null
+        })
+    })
+    ipc.on('makeChanges', (args) => {
+        alert(args)
+        window = new BrowserWindow({width: 800, height: 600, show: false})
+        window.loadFile('./app/CreateNote.html')
+        window.webContents.send(args)
+        window.once('ready-to-show', () => {
+            window.show()
+        })
+        window.on('closed', () => {
+            window = null
+        })
     })
 })
 

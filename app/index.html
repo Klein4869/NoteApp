@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>My Note</title>
-  </head>
-  <body>
-  <button onclick=""><p style="color: red">Add new</p></button>
+    <script>const index = require('./js/index')</script>
+</head>
+<body>
+<button onclick="index.openCreateWindow()"><p style="color: red">Add new</p></button>
+<div class="notDisplay">
     <script>
-      // You can also require other files to run in this process
-      require('../renderer.js')
+        index.displayNote()
     </script>
-  </body>
+</div>
+</body>
 </html>
