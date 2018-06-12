@@ -21,5 +21,9 @@
   "homepage": "https://github.com/Klein4869/NoteApp#readme",
   "devDependencies": {
     "electron": "^2.0.2"
+  },
+  "dependencies": {
+    "electron-rebuild": "^1.7.3",
+    "sqlite3": "^4.0.0"
   }
 }

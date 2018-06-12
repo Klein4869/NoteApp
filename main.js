@@ -152,14 +152,10 @@ app.on('ready', function () {
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
     ipc.on('createClose', (event, num) => {
-        mainWindow.reload()
+        mainWindow.webContents.send('makeChanges', num)
         window.close()
-    })
-    ipc.on('openCreateWindow', () => {
-        window.show()
-        window.on('closed', () => {
-            window = null
-        })
+        window = new BrowserWindow({width: 800, height: 600, show: false})
+        window.loadFile('./app/CreateNote.html')
     })
     ipc.on('makeChanges', (event, key) => {
         window.webContents.send('makeChanges', key)
@@ -167,6 +163,9 @@ app.on('ready', function () {
         window.on('closed', () => {
             window = null
         })
+    })
+    ipc.on('mainReload', (event) => {
+        mainWindow.reload()
     })
 })
 

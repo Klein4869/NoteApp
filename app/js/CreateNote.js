@@ -12,10 +12,6 @@ ipc.on('makeChanges', (event, key) => {
     document.getElementById('contentInput').value = localStorage.getItem(key1)
 })
 
-function del() {
-    document.getElementById('contentInput').value = ""
-}
-
 exports.save = () => {
     let title = document.getElementById('titleInput').value
     let content = document.getElementById('contentInput').value
@@ -34,14 +30,15 @@ exports.save = () => {
         ipc.send('createClose', num)
     } else {
         let i = localStorage.length
+        while (localStorage.getItem(i) !== null){
+            i++
+        }
         localStorage.setItem('note_title' + i, title)
         localStorage.setItem('note_content' + i, content)
-        ipc.send('createClose')
+        ipc.send('createClose', i)
     }
 }
 
 exports.cancel = () => {
     ipc.send('createClose')
 }
-
-exports.del = del
