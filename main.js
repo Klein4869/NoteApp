@@ -1,8 +1,11 @@
 // Modules to control application life and create native browser window
 const electron = require('electron')
 const app = electron.app
+const ipc = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow
 const Menu = electron.Menu
+
+let window
 
 let template = [{
     label: 'Electron',
@@ -14,6 +17,23 @@ let template = [{
             aboutWindow.loadFile('about.html')
             aboutWindow.on('close', function () {
                 aboutWindow = null
+            })
+        }
+    }]
+}, {
+    label: 'New',
+    submenu: [{
+        label: 'New Note',
+        accelerator: 'CmdOrCtrl + N',
+        role: 'create_new',
+        click: () => {
+            window = new BrowserWindow({width: 800, height: 600, show: false})
+            window.loadFile('./app/CreateNote.html')
+            window.once('ready-to-show', function () {
+                window.show()
+            })
+            window.on('closed', function () {
+                window = null
             })
         }
     }]
@@ -107,10 +127,8 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({width: 800, height: 600, show: false})
 
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
-    mainWindow.once('ready-to-show', () =>{
-        mainWindow.show()
-    })
+    mainWindow.loadFile('./app/index.html')
+    mainWindow.show()
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -127,11 +145,28 @@ function createMainWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createMainWindow)
-
 app.on('ready', function () {
+    window = new BrowserWindow({width: 800, height: 600, show: false})
+    window.loadFile('./app/CreateNote.html')
+    createMainWindow()
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
+    ipc.on('createClose', (event, num) => {
+        mainWindow.webContents.send('makeChanges', num)
+        window.close()
+        window = new BrowserWindow({width: 800, height: 600, show: false})
+        window.loadFile('./app/CreateNote.html')
+    })
+    ipc.on('makeChanges', (event, key) => {
+        window.webContents.send('makeChanges', key)
+        window.show()
+        window.on('closed', () => {
+            window = null
+        })
+    })
+    ipc.on('mainReload', (event) => {
+        mainWindow.reload()
+    })
 })
 
 app.on('browser-window-created', function () {
